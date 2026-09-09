@@ -1,0 +1,22 @@
+WIF/USDT (Bybit spot), train 2026-09-01, validate 2026-09-02, test 2026-09-03. 10-level book sampled every 100 ms.
+Label: DeepLOB-style 3-class (down/flat/up) on smoothed mid over the next 1 s, threshold half a tick (2.48 bps).
+DeepLOB (CNN+LSTM, Zhang/Zohren/Roberts 2019), 120k training windows per epoch, stopped after 4 epochs
+(val loss 0.3625 -> 0.3167 -> 0.3151 -> 0.3037, still improving). Test scored on every 5th window (172,771 windows).
+
+DeepLOB (CNN-LSTM)     acc 91.8%  macroF1 46.0 | confident up/down calls: n=3510, realised edge -0.48 bps
+DeepLOB up-vs-down score -> next mid move direction: acc 56.1% overall; 60.3% on the 20% most decisive
+
+Same test day, fast models (all windows):
+queue imbalance sign   acc 62.0%  macroF1 33.4 | edge +0.52 bps on all calls, +0.65 on the top 19%
+logistic, 9 features   acc 91.1%  macroF1 33.7 | edge +0.21 .. +0.99 bps
+gradient boosting      acc 90.3%  macroF1 35.5 | edge -0.02 .. +1.14 bps (very few confident calls)
+
+Next-move direction (when the mid next moves, which way?), test day, last 40% held out:
+                      WIF (tick 4.96 bps)            BTC (tick 0.01 bps)
+queue imbalance sign  61.0%                          63.4%
+logistic              60.9% / 70.6% top-20% conf     63.4% / 75.3%
+gradient boosting     51.8% / 64.1%                  61.7% / 75.2%
+DeepLOB               56.1% / 60.3%                  (not run)
+
+Fill conditioning on WIF: a resting bid is run over (its level clears) within 5 s 25.8% of the time overall;
+36.4% when imbalance < -0.6, 15.1% when imbalance > +0.6. About half of run-overs recover within 5 s.

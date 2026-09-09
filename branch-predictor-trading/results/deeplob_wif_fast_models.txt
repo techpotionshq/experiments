@@ -1,0 +1,9 @@
+H=10 samples (1.0s), K=5, alpha=2.48 bps | test-day label mix down/flat/up: [np.float64(0.044), np.float64(0.911), np.float64(0.045)]
+queue imbalance sign   acc  62.0%  macroF1  33.4  | top100%: n=307874 edge  0.52bps hit   17/  14 | top50%: n= 93100 edge  0.61bps hit   16/  13 | top19%: n= 17547 edge  0.65bps hit   11/  15
+logistic, 9 features   acc  91.1%  macroF1  33.7  | top100%: n=  2379 edge  0.21bps hit   23/  31 | top50%: n=   209 edge  0.48bps hit   21/  46 | top19%: n=   184 edge  0.99bps hit   22/  57
+gradient boosting, 9 f acc  90.3%  macroF1  35.5  | top100%: n= 12273 edge -0.02bps hit   18/  14 | top50%: n=    94 edge  1.14bps hit   60/  25 | top19%: n=     4 edge  0.57bps hit  nan/  50
+  DeepLOB epoch 1: val loss 0.3625 (455s)
+  DeepLOB epoch 2: val loss 0.3167 (1333s)
+  DeepLOB epoch 3: val loss 0.3151 (1728s)
+  DeepLOB epoch 4: val loss 0.3037 (2138s)
+  DeepLOB epoch 5: val loss 0.2934 (2566s)

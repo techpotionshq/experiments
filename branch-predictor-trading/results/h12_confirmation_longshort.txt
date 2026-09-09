@@ -1,0 +1,45 @@
+12h bars, 2020-09 to 2026-08, fee 7.5 bps per side
+
+BTCUSDT   buy&hold: +37.6%/yr, maxDD -77%, sharpe 0.85
+  strategy                       gross/yr  net/yr  maxDD sharpe trd/yr  long%
+  long-only, 1 bar (baseline)      +42.3%   +7.3%   -70%   0.37    188    52%
+  long-only, 2-bar confirm          +6.0%   -3.7%   -76%   0.11     64    54%
+  long-only, 3-bar confirm         +36.3%  +31.6%   -64%   0.89     24    55%
+  long-only, 2-bit counter         +14.7%   -0.7%   -75%   0.18     96    54%
+  long-short, 1 bar                +25.6%  -28.6%   -95%  -0.31    377    52%
+  long-short, 2-bar confirm        -30.8%  -42.9%   -98%  -0.69    128    54%
+  long-short, 3-bar confirm        +13.8%   +6.1%   -79%   0.39     47    55%
+  long-short, 2-bit counter        -18.8%  -39.2%   -98%  -0.58    193    54%
+
+ETHUSDT   buy&hold: +33.8%/yr, maxDD -81%, sharpe 0.76
+  strategy                       gross/yr  net/yr  maxDD sharpe trd/yr  long%
+  long-only, 1 bar (baseline)      +61.7%  +21.8%   -78%   0.64    189    51%
+  long-only, 2-bar confirm         +21.7%  +10.6%   -75%   0.45     64    52%
+  long-only, 3-bar confirm         +47.2%  +42.3%   -59%   0.94     23    53%
+  long-only, 2-bit counter         +17.9%   +1.3%   -85%   0.28    101    52%
+  long-short, 1 bar                +45.8%  -17.3%   -96%   0.13    378    51%
+  long-short, 2-bar confirm        -19.9%  -33.9%   -98%  -0.16    128    52%
+  long-short, 3-bar confirm        +14.5%   +7.0%   -84%   0.47     45    53%
+  long-short, 2-bit counter        -24.9%  -44.5%   -99%  -0.39    202    52%
+
+SOLUSDT   buy&hold: +67.0%/yr, maxDD -96%, sharpe 1.02
+  strategy                       gross/yr  net/yr  maxDD sharpe trd/yr  long%
+  long-only, 1 bar (baseline)      +25.6%   -5.1%   -90%   0.34    187    49%
+  long-only, 2-bar confirm         -10.8%  -19.3%   -95%   0.16     66    50%
+  long-only, 3-bar confirm         +62.1%  +56.2%   -85%   0.94     25    49%
+  long-only, 2-bit counter          +4.1%  -10.6%   -93%   0.29    101    50%
+  long-short, 1 bar                -53.6%  -73.5%  -100%  -0.54    375    49%
+  long-short, 2-bar confirm        -75.6%  -80.0%  -100%  -0.80    133    50%
+  long-short, 3-bar confirm        -24.1%  -29.6%   -97%   0.27     50    49%
+  long-short, 2-bit counter        -65.6%  -74.6%  -100%  -0.60    202    50%
+
+DOGEUSDT   buy&hold: +72.1%/yr, maxDD -93%, sharpe 0.90
+  strategy                       gross/yr  net/yr  maxDD sharpe trd/yr  long%
+  long-only, 1 bar (baseline)     +124.6%  +69.5%   -90%   0.80    187    50%
+  long-only, 2-bar confirm         +14.0%   +3.0%   -97%   0.45     68    50%
+  long-only, 3-bar confirm         +66.4%  +60.4%   -85%   0.95     24    45%
+  long-only, 2-bit counter         +37.0%  +17.6%   -96%   0.54    102    49%
+  long-short, 1 bar                +48.5%  -15.4%  -100%   0.49    375    50%
+  long-short, 2-bar confirm        -63.8%  -70.5%  -100%  -0.14    136    50%
+  long-short, 3-bar confirm         +nan%   +nan%  -145%   0.13     48    45%
+  long-short, 2-bit counter        -47.2%  -61.1%  -100%   0.03    203    49%

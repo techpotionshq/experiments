@@ -1,0 +1,14 @@
+Live best bid/ask recorded 2026-09-09 ~21:53-22:01 UTC via public websockets (scripts/recorder.py), BTC/USDT (BTC/USD on Kraken).
+Binance websocket unreachable from the recording host. Common window 224 s, 100 ms mid-return grid.
+
+venue        updates/s  med spread bps  tick bps  top-of-book bid $  ask $
+bybit          7.9         0.01          0.013       35,553          13,048
+gate           3.2         0.01          0.013        4,846           5,016
+kraken         5.0         0.01          0.013       15,972          18,562
+bitget         3.5         0.00          0.001       88,447          32,011
+hyperliquid    5.3         0.13          0.128      439,305         237,449
+
+Lead-lag (lag of max cross-correlation):
+  bybit leads gate by 100 ms (corr 0.44)       bybit leads bitget by 100 ms (corr 0.42)
+  bybit ~ kraken simultaneous (corr 0.21)       bybit leads hyperliquid by ~800 ms (corr 0.13)
+  gate leads hyperliquid by ~800 ms (0.25)      kraken leads hyperliquid by ~900 ms (0.11)
