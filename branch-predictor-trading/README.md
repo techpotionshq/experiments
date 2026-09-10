@@ -49,6 +49,14 @@ scales gross and turnover down together and leaves the edge per trade
 unchanged. SOL and DOGE have no 1-second autocorrelation and lose even at zero
 fee. The effect is gone by 15-second bars.
 
+The 1-bit hit rate in the table (28%) looks paradoxical next to that positive
+autocorrelation, but the two measure different things. At 1-second resolution
+most ticks are one-unit bid/ask-bounce reversals, so the raw direction sign
+flips more often than it repeats (low hit rate), while the rarer, larger moves
+persist (positive return autocorrelation and positive gross). The gross is
+carried by a few big directional runs, not by being right often, which is
+exactly why the tiny break-even fee kills it.
+
 The user's exact rule, all in after an up tick and all out after a down tick on
 5-second bars, compounded from $1,000: doubles with no fee, ends under $1 after
 about 38 hours at Binance's 7.5 bps, on every pair (`results/allin_5s.txt`,
@@ -260,8 +268,9 @@ The trend/momentum family was carried over to US equities (Yahoo daily, 30 large
 caps + SPY, 2021-2026, ~2 bps): `results/stocks_momentum.txt`,
 `stocks_bit_logistic.txt`, `news_spike_study.txt`, `weekly_flip.txt`.
 
-- **Cross-sectional momentum works better in stocks:** top-5 + regime + vol
-  target = CAGR 29%, Sharpe 1.38, maxDD -20%, vs SPY 11% / 0.71 / -25%. Higher
+- **Cross-sectional momentum works better in stocks:** top-5 by 30-day momentum
+  + regime filter (equal-weight, no vol target) = CAGR 29%, Sharpe 1.38, maxDD
+  -20%, vs SPY 11% / 0.71 / -25%. Higher
   Sharpe than the crypto basket (1.05) with a third of the drawdown, near-zero
   fees, $100-tradeable via fractional shares.
 - **1-bit and logistic fail here too:** daily direction 50.9% (coin flip);
@@ -278,8 +287,9 @@ Full cross-asset synthesis and the practical playbook are in **`FINDINGS.md`**.
 
 ## Ranking (all experiments, both asset classes)
 
-1. **US stock cross-sectional momentum** (top-5, regime filter, vol target,
-   section 12). Best risk-adjusted result found: Sharpe 1.38, -20% DD, near-zero
+1. **US stock cross-sectional momentum** (top-5 by 30-day momentum, regime
+   filter, equal-weight, no vol target, section 12). Best risk-adjusted result
+   found: Sharpe 1.38, -20% DD, near-zero
    fees, $100-friendly. Momentum's home market.
 2. Vol-targeted crypto trend basket / cross-sectional breakout (sections 10-11).
    Same DNA, beats hold net of 10 bps, but -30 to -61% drawdowns.
@@ -294,6 +304,13 @@ Full cross-asset synthesis and the practical playbook are in **`FINDINGS.md`**.
 
 **No strategy tested produces reliable weekly gains.** The best weekly-positive
 rate for any real edge was 53-55%.
+
+*Method note: all Sharpe ratios use a zero cash rate (excess-of-zero, not
+excess-of-cash); at 2021-2026 rates, subtract ~0.2-0.3 to compare a single
+Sharpe against holding cash. Positions are always taken the bar after the
+signal (no look-ahead), and long-only levels on still-listed universes are
+survivorship-influenced, so treat the ranking of families as the robust result
+and the exact levels as optimistic. See `FINDINGS.md` for the full method notes.*
 
 ## Reproduce
 

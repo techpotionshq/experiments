@@ -26,7 +26,8 @@ Everything below is a corollary of that sentence.
 ## Final verdict, one line
 
 The best thing we found is **cross-sectional momentum on US stocks** (hold the
-strongest few, cash in a market downtrend, size by volatility): Sharpe ~1.38,
+top 5 by 30-day momentum, re-ranked weekly, and go to cash when the market is in
+a downtrend; equal-weighted): Sharpe ~1.38,
 ~29% CAGR, -20% drawdown, net of fees, and it fits a $100 account with fractional
 shares. The crypto version of the same idea works too but with triple the
 drawdown. Nothing we tested delivers reliable weekly gains; the best weekly-
@@ -110,7 +111,7 @@ Yahoo daily data, 30 large-cap US names + SPY, 2021-2026, ~2 bps
 ### Cross-sectional momentum works, and better than in crypto
 | strategy (net ~2 bps) | CAGR | Sharpe | max DD |
 |---|---|---|---|
-| top-5 momentum + regime + vol target | 29.3% | **1.38** | **-20.4%** |
+| top-5 momentum + regime (equal-weight, no vol target) | 29.3% | **1.38** | **-20.4%** |
 | top-3 momentum + regime | 34.3% | 1.29 | -27.5% |
 | equal-weight all 30 | 15.6% | 0.89 | -29.6% |
 | SPY buy & hold | 11.3% | 0.71 | -25.4% |
@@ -160,10 +161,11 @@ worst weeks: a slight weekly lean, not income.
 
 ## The practical playbook
 
-- **Best algo:** US stock cross-sectional momentum, top-5 by ~3-month return,
-  re-ranked weekly, cash when the equal-weight index is below its 50-day average,
-  sized to volatility. Sharpe ~1.38, ~29% CAGR, -20% DD. Run it as
-  `bt_stocks.py` / `bt_topk.py`-style logic on the stock panel.
+- **Best algo:** US stock cross-sectional momentum, top-5 by 30-day return,
+  re-ranked weekly, cash when the equal-weight index is below its 30-day average,
+  equal-weighted (no vol targeting). Sharpe ~1.38, ~29% CAGR, -20% DD. Run it as
+  `bt_stocks.py` (the crypto small-pool variant `bt_topk.py` adds 50% vol
+  targeting on top; the stock book does not).
 - **Best weekly-flip:** buy last week's 5 strongest stocks, rotate every Friday
   (`bt_weeklyflip.py`). ~21% CAGR, 53% green weeks. Trades weekly, fits $100.
 - **What to avoid:** anything fast and taker; mean reversion / dip-buying on
@@ -193,6 +195,20 @@ python3 scripts/bt_weeklyflip.py
 Data is not committed; every script downloads or reads public archives.
 Kline zips: `data.binance.vision`. Order books: `quote-saver.bycsi.com`.
 Stocks: `query1.finance.yahoo.com/v8/finance/chart/<TICKER>`.
+
+## Method notes
+
+- **Sharpe uses a zero cash rate** (excess-of-zero, not excess-of-cash). At
+  2021-2026 US cash rates, subtract roughly 0.2-0.3 to compare any single Sharpe
+  against holding cash. The comparison *between* a strategy and its buy-and-hold
+  baseline is unaffected, since both use the same convention.
+- **Positions are taken on the bar after the signal** in every backtest
+  (`.shift(1)` on the weight, `direction[t-1]` in `sim.py`), so there is no
+  look-ahead. Fees are charged per side on realized turnover.
+- **Long-only backtests run on still-listed universes** (30 current large-cap
+  stocks, coins still trading), so levels are survivorship-influenced and read as
+  optimistic; the robust takeaway is the *ranking of strategy families*, not the
+  exact CAGR/Sharpe.
 
 ## Disclaimer
 

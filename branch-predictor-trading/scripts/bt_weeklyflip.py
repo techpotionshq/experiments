@@ -33,5 +33,18 @@ for side,lab in [('loser','buy last-week LOSERS (reversal)'),('winner','buy last
     for K in [3,5]:
         net,s=strat(side,K)
         print(f"{lab[:22]+' K'+str(K):<28}{s['cagr']:>6.0f}%{s['sh']:>8.2f}{s['dd']:>7.0f}%{s['pos']:>6.0f}%{s['mean']:>7.2f}%{s['worst']:>8.1f}%")
-# benchmark: SPY weekly
-spy=load('SPY') if False else None
+# ---- live picks as of the latest bar (informational, no orders placed) ----
+asof=close.index.max().date()
+dret=close.pct_change().fillna(0.0)
+eww=close.notna().astype(float).div(close.notna().sum(1).replace(0,np.nan),axis=0)
+mkt=(1+(dret*eww).sum(1)).cumprod()                       # equal-weight index
+risk_on=mkt.iloc[-1]>mkt.rolling(30).mean().iloc[-1]      # regime = index above its 30d avg
+print(f"\nas of {asof} | market regime: {'RISK-ON' if risk_on else 'RISK-OFF'}")
+mom3=close.pct_change(63).iloc[-1].dropna().sort_values(ascending=False)   # ~3-month momentum
+print("\nBEST ALGO pick now -> top 5 by 3-month momentum (hold, re-rank weekly):")
+for t,v in mom3.head(5).items():
+    print(f"   {t:<6} 3mo {v*100:+.0f}%")
+lastwk=wret.iloc[-1].dropna().sort_values(ascending=False)                 # last completed week
+print("\nWEEKLY FLIP pick now -> top 5 by last-week return (rotate every Friday):")
+for t,v in lastwk.head(5).items():
+    print(f"   {t:<6} last wk {v*100:+.1f}%")
