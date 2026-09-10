@@ -1,0 +1,17 @@
+Spike = daily move >2 sigma AND volume >2x its 20-day average (news proxy).
+Average forward return AFTER the spike, across 30 stocks, 5 years:
+
+ horizon  after UP-spike  after DOWN-spike
+     1d          -0.25%             0.37%
+     3d           0.08%             0.65%
+     5d           0.18%             0.76%
+    10d           0.42%             1.77%
+
+total spike events detected: 482 over ~30 stocks x 5y (~3/stock/yr)
+
+BUY the down-spike (fade bad-news drop): 252 trades, hold 10d
+   avg +0.77% / trade   median +0.15%   win 51%   best +27%  worst -16%
+
+BUY the up-spike (chase good news): 227 trades, hold 10d
+   avg +0.66% / trade   median +0.60%   win 54%   best +51%  worst -27%
+
