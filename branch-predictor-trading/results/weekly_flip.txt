@@ -1,0 +1,23 @@
+WEEKLY flip on 30 stocks, 2021-09-10 to 2026-09-11, 262 weeks, 2bps
+
+strategy                       CAGR  Sharpe   maxDD   wk+%  avg wk worst wk
+buy last-week LOSERS ( K3       13%    0.57    -33%    53%   0.32%   -10.8%
+buy last-week LOSERS ( K5       11%    0.54    -30%    51%   0.26%   -10.2%
+buy last-week WINNERS  K3       21%    0.76    -53%    55%   0.45%    -9.9%
+buy last-week WINNERS  K5       21%    0.89    -45%    53%   0.42%    -9.0%
+
+as of 2026-09-10 | market regime: RISK-ON
+
+BEST ALGO pick now -> top 5 by 3-month momentum (hold, re-rank weekly):
+   CRM    3mo +42%
+   MSFT   3mo +24%
+   MA     3mo +15%
+   JPM    3mo +14%
+   META   3mo +14%
+
+WEEKLY FLIP pick now -> top 5 by last-week return (rotate every Friday):
+   INTC   last wk +12.3%
+   AMD    last wk +10.7%
+   META   last wk +9.4%
+   ORCL   last wk +6.9%
+   TSLA   last wk +2.3%
