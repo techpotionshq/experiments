@@ -1,0 +1,27 @@
+=== TOP-3 SIMULATION, start $100, net of 10 bps, 2021-01-01 to 2026-09-09 ===
+final balance : $1,122   (11.2x)   CAGR 53%
+max drawdown  : -63%   (at the worst, $100 of peak was worth $37)
+in-market     : 50% of days (regime filter sits in cash the rest)
+
+-- balance at each year end (start-of-year $ -> end) --
+  2021:  $       100  ->  $         445   (+345%)
+  2022:  $       445  ->  $         312   (-30%)
+  2023:  $       312  ->  $         826   (+165%)
+  2024:  $       826  ->  $       2,508   (+204%)
+  2025:  $     2,508  ->  $       1,857   (-26%)
+  2026:  $     1,857  ->  $       1,122   (-40%)
+
+-- weekly returns (as % moves, comparable across the run) --
+  average week +1.23%  median +0.00%  positive 30%  best +93%  worst -24%
+
+-- last 10 weeks (week ending / weekly % / running balance) --
+  2026-07-12     -4.73%    $1,095
+  2026-07-19     -3.18%    $1,060
+  2026-07-26     -2.47%    $1,034
+  2026-08-02     -2.47%    $1,008
+  2026-08-09    +11.78%    $1,127
+  2026-08-16     -7.57%    $1,041
+  2026-08-23    +21.97%    $1,270
+  2026-08-30    -11.56%    $1,123
+  2026-09-06     +4.86%    $1,178
+  2026-09-13     -4.78%    $1,122
