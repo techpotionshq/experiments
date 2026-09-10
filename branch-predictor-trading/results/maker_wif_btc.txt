@@ -1,0 +1,69 @@
+MAKER simulations for the imbalance strategy. Fill = price trades THROUGH the
+resting quote (same convention as scripts/maker.py). Book-only fills: optimistic
+on queue position (assumes near front), conservative on price. Bybit spot 100ms
+books, 2026-09-01..05 (WIF), 2026-09-01 (BTC).
+
+################################################################
+# A. DIRECTIONAL maker (post bid because bullish). scripts/makerbook.py
+#    Fails: your bid only fills when price ticks DOWN (signal was wrong).
+################################################################
+samples 4,320,001 | L=1 thr=0.6 patience=2.0s hold=10.0s LONG-ONLY
+median spread 4.99 bps | buy-and-hold +8.3% | trades 2762 | passive-exit rate 24% (rest market out)
+   makerFee  net/trade   win%  compound%   (taker-out pays maker+10 taker)
+      10.0b    -23.72b   0.0     -99.9   Bybit spot base
+       5.0b    -17.53b   0.7     -99.2   
+       2.0b    -13.83b  23.6     -97.8   typical perp maker
+       0.0b    -11.35b  23.6     -95.7   free maker
+      -1.0b    -10.12b  23.6     -93.9   
+      -2.0b     -8.88b  23.6     -91.4   Kraken T12 / rebate
+      -2.5b     -8.26b  23.6     -89.8   
+
+################################################################
+# B. SYMMETRIC market maker, imbalance = CANCEL the toxic side. scripts/makermm.py
+#    The real MM business. Break-even maker fee ~ 0 to -0.75 bps; needs a rebate.
+################################################################
+=== WIF 5d, thr=0.6, Qmax=20 ===
+samples 4,320,001 (~5.0 days) | L=1 thr=0.6 Qmax=20 | median spread 4.99 bps | capital ~= Qmax*price = 4 quote-ccy
+
+  --- imbalance-cancel ON ---
+   makerFee    fills  PnL/fill     totalPnL   return% return%/day
+      10.0b    44410  -10.771b        -9.73   -239.2     -47.83
+       2.0b    44410   -2.750b        -2.49    -61.1     -12.21
+       0.0b    44410   -0.745b        -0.67    -16.5      -3.31
+      -1.0b    44410    0.257b         0.23      5.7       1.14
+      -2.0b    44410    1.260b         1.14     28.0       5.60
+      -2.5b    44410    1.761b         1.59     39.1       7.82
+    (buy fills 22201, sell fills 22209, end inventory -8)
+
+  --- always quote both (no cancel) ---
+   makerFee    fills  PnL/fill     totalPnL   return% return%/day
+      10.0b    74687  -11.181b       -16.99   -417.5     -83.51
+       2.0b    74687   -3.183b        -4.84   -118.9     -23.78
+       0.0b    74687   -1.184b        -1.80    -44.2      -8.84
+      -1.0b    74687   -0.184b        -0.28     -6.9      -1.37
+      -2.0b    74687    0.816b         1.24     30.5       6.09
+      -2.5b    74687    1.316b         2.00     49.1       9.83
+    (buy fills 37348, sell fills 37339, end inventory 9)
+
+=== BTC 1d, thr=0.6, Qmax=20 (small-tick control) ===
+samples 864,001 (~1.0 days) | L=1 thr=0.6 Qmax=20 | median spread 0.01 bps | capital ~= Qmax*price = 1,560,198 quote-ccy
+
+  --- imbalance-cancel ON ---
+   makerFee    fills  PnL/fill     totalPnL   return% return%/day
+      10.0b    10179  -10.733b   -852269.00    -54.6     -54.63
+       2.0b    10179   -2.750b   -218352.56    -14.0     -14.00
+       0.0b    10179   -0.754b    -59873.45     -3.8      -3.84
+      -1.0b    10179    0.244b     19366.11      1.2       1.24
+      -2.0b    10179    1.242b     98605.66      6.3       6.32
+      -2.5b    10179    1.741b    138225.44      8.9       8.86
+    (buy fills 5084, sell fills 5095, end inventory -11)
+
+  --- always quote both (no cancel) ---
+   makerFee    fills  PnL/fill     totalPnL   return% return%/day
+      10.0b    31420  -11.178b  -2739766.03   -175.6    -175.60
+       2.0b    31420   -3.191b   -782059.85    -50.1     -50.13
+       0.0b    31420   -1.194b   -292633.30    -18.8     -18.76
+      -1.0b    31420   -0.196b    -47920.03     -3.1      -3.07
+      -2.0b    31420    0.803b    196793.25     12.6      12.61
+      -2.5b    31420    1.302b    319149.88     20.5      20.46
+    (buy fills 15714, sell fills 15706, end inventory 8)
