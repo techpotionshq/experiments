@@ -119,6 +119,20 @@ def run(interval, slow, fast, confirm, target_vol, fee_bps, split):
         h=porthold[porthold.index.year==yr]
         se=(1+g).prod()-1; he=(1+h).prod()-1
         print(f"    {yr}:  {se*100:>7.1f}%  /  {he*100:>7.1f}%")
+    # weekly returns
+    wk=((1+port).resample('W').prod()-1)*100
+    wkh=((1+porthold).resample('W').prod()-1)*100
+    wk=wk[wk.index<=idx.max()]; wkh=wkh.reindex(wk.index)
+    print(f"\n  --- WEEKLY returns, {len(wk)} weeks (STRAT, net of {fee_bps} bps) ---")
+    print(f"    mean {wk.mean():+.2f}%/wk | median {wk.median():+.2f}% | std {wk.std():.2f}% | "
+          f"weekly Sharpe {wk.mean()/wk.std():.2f} (annualized {wk.mean()/wk.std()*np.sqrt(52):.2f})")
+    print(f"    positive weeks {np.mean(wk>0)*100:.0f}% | best {wk.max():+.1f}% | worst {wk.min():+.1f}% | "
+          f"avg compounding {(( (1+wk/100).prod())**(1/len(wk))-1)*100:+.2f}%/wk")
+    print(f"    HOLD for comparison: mean {wkh.mean():+.2f}%/wk | positive {np.mean(wkh>0)*100:.0f}% | "
+          f"worst {wkh.min():+.1f}%")
+    print("  last 12 weeks (week ending / STRAT % / HOLD %):")
+    for d,v in wk.tail(12).items():
+        print(f"    {d.date()}   {v:>7.2f}%   {wkh.get(d,float('nan')):>7.2f}%")
 
 if __name__=='__main__':
     def opt(n,d): return sys.argv[sys.argv.index(n)+1] if n in sys.argv else d
