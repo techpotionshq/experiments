@@ -1,0 +1,75 @@
+BUY AT MARKET, SELL AT LIMIT. Taker entry (market buy at the ask), maker exit
+/bin/bash: line 35: hold: command not found
+(passive sell limit at entry+target, market out at the bid after  if unfilled).
+scripts/takerentry.py. Bybit spot 100ms books, WIF 2026-09-01..05.
+
+The key column is grossPx: price-only P&L BEFORE any fee. It is negative almost
+everywhere, so this structure loses even at zero fees, unlike every other variant.
+Reason: the sell limit caps winners at target while losers run to the market-out
+(short-option payoff), and the market buy pays ~10 bps taker + half-spread up front.
+
+=== thr=0.7, hold=10s ===
+samples 4,320,001 | L=1 thr=0.7 hold=10.0s | median spread 4.99 bps | market-buy pays 10.0 bps taker + half-spread on entry
+
+  --- exit maker fee +10 bps (Bybit maker), taker-out 10.0 bps ---
+   target  trades makerExit%  grossPx  net/trade   win%  compound%
+     0.0b   15723      66.4   -2.73b    -22.73b   0.0    -100.0
+     2.5b   15723      66.4   -1.07b    -21.07b   0.0    -100.0
+     5.0b   13825      45.0   -1.21b    -21.21b   0.0    -100.0
+     7.5b   11702      18.2   -3.07b    -23.07b   0.0    -100.0
+    10.0b   11472      11.4   -3.21b    -23.21b   0.0    -100.0
+    15.0b   11223       3.8   -3.57b    -23.57b   0.0    -100.0
+    20.0b   11150       1.5   -3.65b    -23.65b   1.5    -100.0
+
+  --- exit maker fee +0 bps (free maker), taker-out 10.0 bps ---
+   target  trades makerExit%  grossPx  net/trade   win%  compound%
+     0.0b   15723      66.4   -2.73b    -16.10b   0.0    -100.0
+     2.5b   15723      66.4   -1.07b    -14.44b   0.0    -100.0
+     5.0b   13825      45.0   -1.21b    -16.72b   0.0    -100.0
+     7.5b   11702      18.2   -3.07b    -21.26b   0.0    -100.0
+    10.0b   11472      11.4   -3.21b    -22.07b   0.0    -100.0
+    15.0b   11223       3.8   -3.57b    -23.19b   3.8    -100.0
+    20.0b   11150       1.5   -3.65b    -23.50b   1.5    -100.0
+
+  --- exit maker fee -2 bps (rebate -2), taker-out 10.0 bps ---
+   target  trades makerExit%  grossPx  net/trade   win%  compound%
+     0.0b   15723      66.4   -2.73b    -14.77b   0.0    -100.0
+     2.5b   15723      66.4   -1.07b    -13.11b   0.0    -100.0
+     5.0b   13825      45.0   -1.21b    -15.82b   0.0    -100.0
+     7.5b   11702      18.2   -3.07b    -20.89b   0.0    -100.0
+    10.0b   11472      11.4   -3.21b    -21.84b  11.4    -100.0
+    15.0b   11223       3.8   -3.57b    -23.11b   3.8    -100.0
+    20.0b   11150       1.5   -3.65b    -23.47b   1.5    -100.0
+
+=== thr=0.9 (strongest 10%), hold=60s (max chance for the limit to fill) ===
+samples 4,320,001 | L=1 thr=0.9 hold=60.0s | median spread 4.99 bps | market-buy pays 10.0 bps taker + half-spread on entry
+
+  --- exit maker fee +10 bps (Bybit maker), taker-out 10.0 bps ---
+   target  trades makerExit%  grossPx  net/trade   win%  compound%
+     0.0b    2629      87.7   -2.09b    -22.09b   0.0     -99.7
+     2.5b    2629      87.7    0.10b    -19.90b   0.0     -99.5
+     5.0b    2069      72.4   -0.20b    -20.20b   0.0     -98.5
+     7.5b    1761      59.6   -0.73b    -20.73b   0.0     -97.4
+    10.0b    1619      46.1   -1.21b    -21.21b   0.0     -96.8
+    15.0b    1508      28.1   -1.82b    -21.82b   0.0     -96.3
+    20.0b    1462      16.1   -2.34b    -22.34b  16.1     -96.2
+
+  --- exit maker fee +0 bps (free maker), taker-out 10.0 bps ---
+   target  trades makerExit%  grossPx  net/trade   win%  compound%
+     0.0b    2629      87.7   -2.09b    -13.32b   0.0     -97.0
+     2.5b    2629      87.7    0.10b    -11.13b   0.0     -94.7
+     5.0b    2069      72.4   -0.20b    -12.97b   0.0     -93.2
+     7.5b    1761      59.6   -0.73b    -14.77b   0.0     -92.6
+    10.0b    1619      46.1   -1.21b    -16.60b   0.0     -93.2
+    15.0b    1508      28.1   -1.82b    -19.01b  28.1     -94.3
+    20.0b    1462      16.1   -2.34b    -20.72b  16.1     -95.2
+
+  --- exit maker fee -2 bps (rebate -2), taker-out 10.0 bps ---
+   target  trades makerExit%  grossPx  net/trade   win%  compound%
+     0.0b    2629      87.7   -2.09b    -11.57b   0.0     -95.2
+     2.5b    2629      87.7    0.10b     -9.38b   0.0     -91.5
+     5.0b    2069      72.4   -0.20b    -11.52b   0.0     -90.8
+     7.5b    1761      59.6   -0.73b    -13.57b   0.0     -90.9
+    10.0b    1619      46.1   -1.21b    -15.67b  46.1     -92.1
+    15.0b    1508      28.1   -1.82b    -18.45b  28.1     -93.8
+    20.0b    1462      16.1   -2.34b    -20.40b  16.1     -95.0
