@@ -1,0 +1,10 @@
+=== LIVE SIGNAL as of 2026-09-09 (data through the last complete daily bar) ===
+MARKET REGIME: RISK-ON (index above its 30d avg)
+
+HOLD 29 coins, equal weight: 1000SATS, ADA, APT, ARB, ATOM, AVAX, BNB, BTC, DOGE, DOT, ETH, FLOKI, INJ, LINK, LTC, MEME, NEAR, NEIRO, OP, PEPE, PNUT, RUNE, SEI, SHIB, SOL, SUI, TIA, WIF, XRP
+
+  SPOT $100:  $3.45 in each of the 29 names
+  2x   $100:  $6.90 exposure in each (=$200 gross, $100 margin); liquidation risk if the book drops ~50%
+
+  (vol targeting may scale total exposure below 100% in calm/volatile regimes;
+   this shows the full-exposure book. Rebalance weekly.)
