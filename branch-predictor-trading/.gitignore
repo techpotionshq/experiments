@@ -10,3 +10,4 @@ kmeme/
 kdaily/
 stocks/
 *.json
+datacache/
