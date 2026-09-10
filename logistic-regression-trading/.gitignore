@@ -1,0 +1,7 @@
+data/
+klines/
+*.npz
+*.csv
+*.zip
+__pycache__/
+*.pt

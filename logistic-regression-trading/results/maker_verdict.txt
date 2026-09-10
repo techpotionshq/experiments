@@ -1,0 +1,21 @@
+Passive imbalance-skewed maker, Bybit spot 2025-12-30, $100 start, $25 orders, thr 0.5.
+WIF: book-only 'queue-reactive' fill model (marketmaker.py) vs honest trade-driven fills (mmtrades.py), fee sweep:
+-- book-only queue model (optimistic: counts every best-quote size drop as a fill) --
+WIFUSDT_2025-12-30.npz       fee  -2.5bps thr 0.50 skew True fill=queue  | ret  +61.55%  final $ 161.55  fills   1923 (   80/hr b962/a961)  maxDD   -0.3%  endInv $-10.86
+WIFUSDT_2025-12-30.npz       fee   0.0bps thr 0.50 skew True fill=queue  | ret  +49.53%  final $ 149.53  fills   1923 (   80/hr b962/a961)  maxDD   -0.4%  endInv $-10.86
+WIFUSDT_2025-12-30.npz       fee   2.0bps thr 0.50 skew True fill=queue  | ret  +39.92%  final $ 139.92  fills   1923 (   80/hr b962/a961)  maxDD   -0.5%  endInv $-10.86
+WIFUSDT_2025-12-30.npz       fee  10.0bps thr 0.50 skew True fill=queue  | ret   +1.46%  final $ 101.46  fills   1923 (   80/hr b962/a961)  maxDD   -3.5%  endInv $-10.86
+-- honest fills from real spot trades --
+WIFUSDT_2025-12-30.npz   fee  -2.5 thr 0.50 skew True | ret   +0.10%  final $ 100.10  fills     2 (   0/hr b1/a1)  maxDD   -0.1%  endInv $+0.00
+WIFUSDT_2025-12-30.npz   fee   0.0 thr 0.50 skew True | ret   +0.09%  final $ 100.09  fills     2 (   0/hr b1/a1)  maxDD   -0.1%  endInv $+0.00
+WIFUSDT_2025-12-30.npz   fee   2.0 thr 0.50 skew True | ret   +0.08%  final $ 100.08  fills     2 (   0/hr b1/a1)  maxDD   -0.1%  endInv $+0.00
+WIFUSDT_2025-12-30.npz   fee  10.0 thr 0.50 skew True | ret   +0.04%  final $ 100.04  fills     2 (   0/hr b1/a1)  maxDD   -0.1%  endInv $+0.00
+
+Honest fills, every pair, zero fee (if it loses at zero fee no venue/rebate saves it):
+WIFUSDT_2025-12-30.npz   fee   0.0 thr 0.50 skew True | ret   +0.09%  final $ 100.09  fills     2 (   0/hr b1/a1)  maxDD   -0.1%  endInv $+0.00
+PEPEUSDT_2025-12-30.npz  fee   0.0 thr 0.50 skew True | ret   +0.00%  final $ 100.00  fills     0 (   0/hr b0/a0)  maxDD    0.0%  endInv $+0.00
+BONKUSDT_2025-12-30.npz  fee   0.0 thr 0.50 skew True | ret   +0.00%  final $ 100.00  fills     0 (   0/hr b0/a0)  maxDD    0.0%  endInv $+0.00
+FLOKIUSDT_2025-12-30.npz fee   0.0 thr 0.50 skew True | ret   -0.27%  final $  99.73  fills   247 (  10/hr b124/a123)  maxDD   -0.8%  endInv $+23.80
+DOGEUSDT_2025-12-30.npz  fee   0.0 thr 0.50 skew True | ret   -1.49%  final $  98.51  fills  1199 (  50/hr b600/a599)  maxDD   -1.5%  endInv $+22.18
+XRPUSDT_2025-12-30.npz   fee   0.0 thr 0.50 skew True | ret   -0.85%  final $  99.15  fills   575 (  24/hr b288/a287)  maxDD   -1.0%  endInv $+23.78
+BTCUSDT_2025-12-30.npz   fee   0.0 thr 0.50 skew True | ret   -1.58%  final $  98.42  fills   963 (  40/hr b482/a481)  maxDD   -1.6%  endInv $+23.40
