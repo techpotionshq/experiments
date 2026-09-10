@@ -1,0 +1,17 @@
+SINGLE-COIN test of the time-series half of the section-11 algo (breakout + own
+trend filter + vol target), net of 10 bps, vs buy-and-hold. scripts/bt_single.py
+The winning algo is CROSS-SECTIONAL (ranks coins), so it cannot run on one coin;
+this is the most of it that a single asset can carry.
+
+
+XRPUSDT  (2021-01-01 to 2026-08-31, 2069 days, fee 10.0 bps)
+  TREND net        CAGR    23.5%  Sharpe  0.69  maxDD  -53.2%  | wk mean +0.65% med +0.00% pos 13% worst -19.5%
+  buy & hold       CAGR    36.4%  Sharpe  0.78  maxDD  -83.2%  | wk mean +1.57% med -1.33% pos 45% worst -45.5%
+
+XMRUSDT  (2021-01-01 to 2024-02-20, 1146 days, fee 10.0 bps)
+  TREND net        CAGR     4.5%  Sharpe  0.33  maxDD  -58.3%  | wk mean +0.26% med +0.00% pos 22% worst -36.5%
+  buy & hold       CAGR    -4.2%  Sharpe  0.42  maxDD  -78.4%  | wk mean +0.51% med +1.05% pos 56% worst -42.3%
+
+Note: XMR (Monero) was delisted from Binance 2024-02 (privacy-coin regulation),
+so its data stops there and it is not spot-tradeable on Binance now.
+For reference, the section-11 basket (XRP is one of 31 coins in it): Sharpe 1.05.
