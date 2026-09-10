@@ -1,0 +1,46 @@
+STRATEGY SEARCH across a 31-coin alt+meme universe (majors, mid-cap alts, memes),
+Binance spot 1h klines resampled to daily, 2021-2026, all net of fee. scripts/bt_search.py
+Long-only. Cross-sectional books rebalance weekly. Regime = equal-weight index above
+its 30d average (else cash). voltgt50 = scale book to 50% annualized vol, no leverage.
+
+########## main comparison, fee 10 bps/side ##########
+universe 31 coins | 2069 daily bars (2021-01-01 to 2026-08-31) | fee 10 bps/side
+coins: 1000SATS, ADA, APT, ARB, ATOM, AVAX, BNB, BOME, BONK, BTC, DOGE, DOT, ETH, FLOKI, INJ, LINK, LTC, MEME, NEAR, NEIRO, OP, PEPE, PNUT, RUNE, SEI, SHIB, SOL, SUI, TIA, WIF, XRP
+
+strategy                      CAGR  Sharpe   maxDD wk_mean wk_med wk_pos% wk_worst
+XSMOM top25% lb30            38.9%    0.81  -86.5%   1.42%  0.00%     49%   -42.0%
+XSMOM + regime30             49.0%    0.92  -71.0%   1.26%  0.00%     28%   -31.6%
+BREAK 30d/15d                47.5%    0.88  -89.2%   1.53%  0.00%     42%   -38.3%
+BREAK + regime30             53.2%    1.03  -69.3%   1.27%  0.00%     31%   -38.0%
+BREAK + regime + voltgt50    47.1%    1.05  -61.4%   1.06%  0.00%     31%   -21.6%
+XSREV bot25% lb30           -29.3%    0.10  -98.0%   0.18% -0.73%     46%   -43.7%
+TSMOM sma30 + regime30       44.3%    0.95  -69.0%   1.10%  0.00%     29%   -35.7%
+equal-weight HOLD            30.0%    0.74  -86.6%   1.26%  0.26%     51%   -49.2%
+
+  per-year net % (BREAK+regime+voltgt50 / HOLD):
+    2021:    413.2%  /   1190.7%
+    2022:    -36.4%  /    -73.2%
+    2023:    136.2%  /    181.5%
+    2024:    132.5%  /     88.1%
+    2025:    -40.8%  /    -67.7%
+    2026:    -16.1%  /    -25.2%
+
+########## lookback robustness (BREAK+regime+voltgt50) ##########
+lb=20  BREAK + regime + voltgt50    52.7%    1.15  -54.3%   1.11%  0.00%     32%   -19.4%
+lb=20    per-year net % (BREAK+regime+voltgt50 / HOLD):
+lb=30  BREAK + regime + voltgt50    47.1%    1.05  -61.4%   1.06%  0.00%     31%   -21.6%
+lb=30    per-year net % (BREAK+regime+voltgt50 / HOLD):
+lb=40  BREAK + regime + voltgt50    33.5%    0.84  -59.5%   0.86%  0.00%     30%   -24.6%
+lb=40    per-year net % (BREAK+regime+voltgt50 / HOLD):
+lb=55  BREAK + regime + voltgt50    37.3%    0.90  -63.2%   0.89%  0.00%     29%   -22.5%
+lb=55    per-year net % (BREAK+regime+voltgt50 / HOLD):
+
+########## fee robustness (BREAK+regime+voltgt50, lb=30) ##########
+fee=0 bps  BREAK + regime + voltgt50    54.1%    1.15  -58.4%   1.15%  0.00%     31%   -21.4%
+fee=0 bps    per-year net % (BREAK+regime+voltgt50 / HOLD):
+fee=10 bps  BREAK + regime + voltgt50    47.1%    1.05  -61.4%   1.06%  0.00%     31%   -21.6%
+fee=10 bps    per-year net % (BREAK+regime+voltgt50 / HOLD):
+fee=20 bps  BREAK + regime + voltgt50    40.4%    0.95  -64.6%   0.97%  0.00%     30%   -21.8%
+fee=20 bps    per-year net % (BREAK+regime+voltgt50 / HOLD):
+fee=30 bps  BREAK + regime + voltgt50    34.0%    0.85  -67.7%   0.88%  0.00%     30%   -22.0%
+fee=30 bps    per-year net % (BREAK+regime+voltgt50 / HOLD):

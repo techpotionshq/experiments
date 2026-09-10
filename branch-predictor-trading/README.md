@@ -219,10 +219,47 @@ momentum (crisis-alpha / drawdown protection), not a secret edge, and out of
 sample (2024+) it degrades honestly to Sharpe 0.73 while still halving hold's
 drawdown.
 
+## 11. What actually works on alts and memes: cross-sectional trend
+
+`scripts/bt_search.py` searches four families over a 31-coin universe (majors,
+mid-cap alts, memes) on daily bars, 2021-2026, all net of fee, weekly rebalance
+for the cross-sectional books (`results/strategy_search.txt`). The answer is not
+mean reversion (section, `results/meanrev_memes.txt`, loses) and not
+short-term reversal (XSREV, -29%/yr). It is trend, in two forms that both beat
+buy-and-hold net of 10 bps:
+
+| net of 10 bps/side | CAGR | Sharpe | max DD | worst week |
+|---|---|---|---|---|
+| cross-sectional momentum (top 25%, weekly) | +38.9% | 0.81 | -86% | -42% |
+| Donchian breakout (30d high / 15d low) | +47.5% | 0.88 | -89% | -38% |
+| **breakout + market-regime filter + vol target** | **+47.1%** | **1.05** | **-61%** | **-22%** |
+| equal-weight buy-and-hold | +30.0% | 0.74 | -87% | -49% |
+
+The winner adds two risk overlays from section 10: a **market-regime filter**
+(go fully to cash when the equal-weight index is below its 30-day average) and
+**volatility targeting** (scale the book to 50% annualized vol, no leverage).
+Together they cut the drawdown from -89% to -61% and halve the worst week, while
+keeping ~47% CAGR and lifting Sharpe to 1.05. It beats hold on CAGR, Sharpe and
+drawdown at once. It is robust: Sharpe 0.84 to 1.15 across lookbacks 20 to 55,
+and still Sharpe 0.85 at 30 bps/side (triple the fee), because weekly rebalance
+keeps turnover low.
+
+Honest limits: it is still a volatile alt book, drawdown -61% and only 31% of
+weeks positive (median week 0%), so it is lumpy trend, not steady weekly income.
+It protects in down years (2022 -36% vs hold -73%) and beat hold in 2024 (+133%
+vs +88%), but lost in 2025 (-41%) and 2026 (-16%): alt trend has been poor
+lately. The universe is survivorship-biased (only coins still listed), which
+flatters any long-only backtest, though breakout/momentum that buys strength is
+less exposed to it than dip-buying. Parameters were picked looking at the full
+sample, so treat the level as optimistic and the ranking of families as the
+robust result.
+
 ## Ranking
 
 1. Vol-targeted trend basket, daily bars (section 10). The only build that makes
    the 10 bps fee a rounding error. Beats hold on Sharpe, halves its drawdown.
+1b. Same DNA for alts/memes: cross-sectional momentum or breakout + regime filter
+   + vol target (section 11). Beats hold on CAGR, Sharpe and drawdown net of fees.
 2. Long-only, 12h bars, 3-bar confirmation. Net positive at retail fees. Matches
    holding with shallower drawdowns. Not a tuned edge. (Same family as 1.)
 3. Logistic regression on queue imbalance and order-flow features for the next
