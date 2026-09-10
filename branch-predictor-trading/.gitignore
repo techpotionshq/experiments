@@ -1,4 +1,7 @@
 data/
+ob/
 *.zip
 *.csv
+*.data
+*.npz
 __pycache__/
