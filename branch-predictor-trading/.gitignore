@@ -5,3 +5,4 @@ ob/
 *.data
 *.npz
 __pycache__/
+k1h/

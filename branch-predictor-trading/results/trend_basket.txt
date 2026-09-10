@@ -1,0 +1,29 @@
+THE FEE-ROBUST STRATEGY: vol-targeted trend-following on a crypto basket.
+Long-flat, daily bars, trend filter + confirmation + volatility targeting.
+Binance spot 1h klines resampled to 24h, 6 coins, 2021-01 to 2026-08.
+scripts/bt_trend.py . The point: the 10 bps maker fee is nearly irrelevant
+here because turnover is ~26 unit-trades/yr, not tens of thousands.
+
+########## Default (best robust) config, full detail ##########
+
+=== vol-targeted trend basket | 24H bars | slow=30 fast=8 confirm=2 targetVol=60% | fee 10.0 bps/side ===
+coins: BTC, ETH, SOL, DOGE, BNB, XRP | 2069 bars (2021-01-01 to 2026-08-31)
+avg turnover/bar 0.071 -> ~26 unit-trades/yr | fee drag ~2.6%/yr
+  full sample        STRAT net: CAGR    30.2%  Sharpe 1.20  maxDD  -30.5%   | HOLD: CAGR    82.7%  Sharpe 1.15  maxDD  -77.8%
+  in-samp <2024-01-01 STRAT net: CAGR    44.7%  Sharpe 1.61  maxDD  -30.5%   | HOLD: CAGR   158.6%  Sharpe 1.48  maxDD  -77.8%
+  OUT-samp >=2024-01-01 STRAT net: CAGR    15.7%  Sharpe 0.73  maxDD  -26.2%   | HOLD: CAGR    23.6%  Sharpe 0.65  maxDD  -63.3%
+  per-year net (STRAT / HOLD):
+    2021:    119.0%  /   2053.9%
+    2022:    -19.2%  /    -68.2%
+    2023:     71.0%  /    152.5%
+    2024:     41.2%  /    160.1%
+    2025:      4.8%  /    -16.8%
+    2026:     -0.2%  /    -18.6%
+
+########## Fee sensitivity: profit survives well past 10 bps ##########
+  fee/side   CAGR      Sharpe    maxDD     feeDrag
+      0 bps  CAGR    33.6%  Sharpe 1.31  maxDD  -28.7%  fee drag ~0.0%/yr
+      5 bps  CAGR    31.9%  Sharpe 1.25  maxDD  -29.6%  fee drag ~1.3%/yr
+     10 bps  CAGR    30.2%  Sharpe 1.20  maxDD  -30.5%  fee drag ~2.6%/yr
+     20 bps  CAGR    26.9%  Sharpe 1.10  maxDD  -32.2%  fee drag ~5.2%/yr
+     30 bps  CAGR    23.7%  Sharpe 0.99  maxDD  -33.9%  fee drag ~7.8%/yr

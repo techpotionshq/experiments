@@ -188,14 +188,47 @@ of capital with colocation. Retail-scale quants run funding-rate carry (10 to
 30% a year quoted), basis trades (5 to 15%), being fastest in a small market,
 and slow trend rules like section 4.
 
+## 10. The fee-robust build: vol-targeted trend basket
+
+The question "make something that profits despite a 10 bps maker fee" has one
+answer, and it is not in the order book. At 10 bps/side a round trip pays 20 bps
+in fees; the order-book signal is worth 4 to 8 bps per move, so no fast strategy
+clears it (sections 5 to 7, and the event-driven and maker sims in
+`results/eventdriven_wif_btc.txt`, `results/maker_wif_btc.txt`,
+`results/takerentry_wif.txt`). The only way to make the fee irrelevant is to
+trade rarely at a horizon where moves are hundreds of bps, so 20 bps is noise.
+
+`scripts/bt_trend.py` builds that: long-flat (no shorting), daily bars, a 30-day
+trend filter, an 8-day momentum entry with 2-bar confirmation (the branch
+predictor's saturating-counter idea, here to cut turnover), volatility targeting
+to 60% annualized, equal-weight across BTC/ETH/SOL/DOGE/BNB/XRP. Binance spot
+1h klines resampled to 24h, 2021-01 to 2026-08 (`results/trend_basket.txt`).
+
+| 24h trend basket, 10 bps/side | CAGR | Sharpe | max DD |
+|---|---|---|---|
+| strategy, net of fees | +30.2% | 1.20 | -30.5% |
+| buy-and-hold basket | +82.7% | 1.15 | -77.8% |
+
+It gives up raw return (hold rode the 2021 melt-up) but beats hold on Sharpe and
+runs less than half the drawdown, and it protects in the bad years: 2022 -19% vs
+hold -68%, 2025 +5% vs hold -17%, 2026 flat vs hold -19%. Turnover is ~26
+unit-trades/yr, so the fee costs only 2.6%/yr. It still returns 23.7% at Sharpe
+~1 even at 30 bps/side, triple the Bybit maker fee. That is what "profit despite
+the fee" looks like: the fee is ~8% of gross, not 300%. It is time-series
+momentum (crisis-alpha / drawdown protection), not a secret edge, and out of
+sample (2024+) it degrades honestly to Sharpe 0.73 while still halving hold's
+drawdown.
+
 ## Ranking
 
-1. Long-only, 12h bars, 3-bar confirmation. Net positive at retail fees. Matches
-   holding with shallower drawdowns. Not a tuned edge.
-2. Logistic regression on queue imbalance and order-flow features for the next
+1. Vol-targeted trend basket, daily bars (section 10). The only build that makes
+   the 10 bps fee a rounding error. Beats hold on Sharpe, halves its drawdown.
+2. Long-only, 12h bars, 3-bar confirmation. Net positive at retail fees. Matches
+   holding with shallower drawdowns. Not a tuned edge. (Same family as 1.)
+3. Logistic regression on queue imbalance and order-flow features for the next
    mid move. Strongest predictor per line of code. Pays only as a maker with
    rebates.
-3. Everything fast and taker: real signals, each smaller than the cost of acting
+4. Everything fast and taker: real signals, each smaller than the cost of acting
    on them.
 
 ## Reproduce
@@ -212,6 +245,13 @@ python3 scripts/lobmodels.py dayA.npz dayB.npz dayC.npz 10 5
 python3 scripts/nextmove.py dayC.npz
 # live quotes
 python3 scripts/recorder.py 480
+# fee-robust trend basket (section 10): 1h klines in k1h/, resampled to 24h
+python3 scripts/bt_trend.py --interval 24H --slow 30 --fast 8 --confirm 2 --targetvol 0.6 --fee 10
+# order-book execution sims (section 5-7 follow-ups): needs ob/*.npz from lobparse
+python3 scripts/eventdriven.py ob/WIF_*.npz --lvl 1 --fee 10      # taker both legs
+python3 scripts/makermm.py    ob/WIF_*.npz --lvl 1 --thr 0.6     # symmetric maker, imbalance cancel
+python3 scripts/makerbook.py  ob/WIF_*.npz --thr 0.6             # directional maker
+python3 scripts/takerentry.py ob/WIF_*.npz --thr 0.7            # buy market, sell limit
 ```
 
 Kline zips: `data.binance.vision/data/spot/{daily,monthly}/klines/<SYMBOL>/<1s|1m|1h>/`.
