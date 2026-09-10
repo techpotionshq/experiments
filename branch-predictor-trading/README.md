@@ -254,19 +254,46 @@ less exposed to it than dip-buying. Parameters were picked looking at the full
 sample, so treat the level as optimistic and the ranking of families as the
 robust result.
 
-## Ranking
+## 12. Stocks: the same idea, cleaner (and the cross-asset verdict)
 
-1. Vol-targeted trend basket, daily bars (section 10). The only build that makes
-   the 10 bps fee a rounding error. Beats hold on Sharpe, halves its drawdown.
-1b. Same DNA for alts/memes: cross-sectional momentum or breakout + regime filter
-   + vol target (section 11). Beats hold on CAGR, Sharpe and drawdown net of fees.
-2. Long-only, 12h bars, 3-bar confirmation. Net positive at retail fees. Matches
-   holding with shallower drawdowns. Not a tuned edge. (Same family as 1.)
-3. Logistic regression on queue imbalance and order-flow features for the next
-   mid move. Strongest predictor per line of code. Pays only as a maker with
-   rebates.
-4. Everything fast and taker: real signals, each smaller than the cost of acting
-   on them.
+The trend/momentum family was carried over to US equities (Yahoo daily, 30 large
+caps + SPY, 2021-2026, ~2 bps): `results/stocks_momentum.txt`,
+`stocks_bit_logistic.txt`, `news_spike_study.txt`, `weekly_flip.txt`.
+
+- **Cross-sectional momentum works better in stocks:** top-5 + regime + vol
+  target = CAGR 29%, Sharpe 1.38, maxDD -20%, vs SPY 11% / 0.71 / -25%. Higher
+  Sharpe than the crypto basket (1.05) with a third of the drawdown, near-zero
+  fees, $100-tradeable via fractional shares.
+- **1-bit and logistic fail here too:** daily direction 50.9% (coin flip);
+  logistic 51.7% vs a 51.6% base rate. Same short-horizon-is-noise result.
+- **News-spike reaction** (proxy: >2 sigma on >2x volume): down-spikes revert
+  ~+1.8% over 10d, edge ~+0.7%/trade but 51-54% win, survivorship-biased. The one
+  place an ML/LLM layer earns its keep: reading the news *text* to tell an
+  overreaction from a fundamental break. Needs a news feed to test properly.
+- **Weekly flip:** buy last week's 5 strongest, rotate Friday = CAGR 21%, Sharpe
+  0.89, 53% positive weeks. The best real-edge weekly-trading strategy found, but
+  still ~half red weeks. No strategy gave reliable weekly gains.
+
+Full cross-asset synthesis and the practical playbook are in **`FINDINGS.md`**.
+
+## Ranking (all experiments, both asset classes)
+
+1. **US stock cross-sectional momentum** (top-5, regime filter, vol target,
+   section 12). Best risk-adjusted result found: Sharpe 1.38, -20% DD, near-zero
+   fees, $100-friendly. Momentum's home market.
+2. Vol-targeted crypto trend basket / cross-sectional breakout (sections 10-11).
+   Same DNA, beats hold net of 10 bps, but -30 to -61% drawdowns.
+3. Long-only 12h 3-bar confirmation (section 4). Net positive at retail fees;
+   matches holding with shallower drawdowns. Same family.
+4. Logistic / queue imbalance for the next mid move (sections 5-7). Strongest
+   predictor per line of code. Pays only as a rebated maker, not for retail.
+5. News-spike reversion on stocks. Small real edge (~0.7%/trade), noisy; wants an
+   ML news-text classifier to be worth trading.
+6. Everything fast and taker, and next-tick prediction (1-bit, logistic on price):
+   real signals or coin flips, each smaller than the cost of acting on them.
+
+**No strategy tested produces reliable weekly gains.** The best weekly-positive
+rate for any real edge was 53-55%.
 
 ## Reproduce
 
@@ -289,8 +316,23 @@ python3 scripts/eventdriven.py ob/WIF_*.npz --lvl 1 --fee 10      # taker both l
 python3 scripts/makermm.py    ob/WIF_*.npz --lvl 1 --thr 0.6     # symmetric maker, imbalance cancel
 python3 scripts/makerbook.py  ob/WIF_*.npz --thr 0.6             # directional maker
 python3 scripts/takerentry.py ob/WIF_*.npz --thr 0.7            # buy market, sell limit
+# cross-sectional search + small-pool + live (sections 11-12): k1h/ kmeme/ kalt/ kline folders
+python3 scripts/bt_search.py  --fee 10 --top 0.25 --lookback 30 --regime 30
+python3 scripts/bt_topk.py    --lookback 30 --fee 10 --live --K 5   # small pool + live picks
+python3 scripts/bt_meanrev.py --interval 1H --entry 2.0 --trend 168 --fee 10   # meme mean reversion (loses)
+python3 scripts/sim_top3.py; python3 scripts/live_signal.py
+# stocks (section 12): stocks/*.json from Yahoo chart API
+python3 scripts/bt_stocks.py        # cross-sectional momentum vs SPY
+python3 scripts/bt_stocks_bit.py    # 1-bit + logistic (coin flip)
+python3 scripts/bt_newsspike.py     # news-spike reaction
+python3 scripts/bt_weeklyflip.py    # weekly momentum vs reversal
 ```
 
 Kline zips: `data.binance.vision/data/spot/{daily,monthly}/klines/<SYMBOL>/<1s|1m|1h>/`.
 Futures depth snapshots: `data.binance.vision/data/futures/um/daily/bookDepth/BTCUSDT/`.
-Scripts use relative folder names as in the session (`k/`, `m/`, `h/`, `bd/`, `ob/`, `rec/`).
+Stocks: `query1.finance.yahoo.com/v8/finance/chart/<TICKER>?range=5y&interval=1d`.
+Scripts use relative folder names as in the session (`k/`, `m/`, `h/`, `bd/`, `ob/`,
+`rec/`, `k1h/`, `kmeme/`, `kalt/`, `stocks/`).
+
+**See `FINDINGS.md` for the full cross-asset synthesis, the ranking of every
+strategy tested, and the practical playbook.**
