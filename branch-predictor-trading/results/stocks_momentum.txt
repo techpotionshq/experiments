@@ -1,0 +1,7 @@
+US stocks, 2021-09-10 to 2026-09-10, 30 names, ~2bps fee
+
+  top-5 mom + regime         CAGR   29.3%  Sharpe 1.38  maxDD  -20.4%  wkPos  42%
+  top-5 mom (no regime)      CAGR   29.6%  Sharpe 1.16  maxDD  -37.6%  wkPos  55%
+  top-3 mom + regime         CAGR   34.3%  Sharpe 1.29  maxDD  -27.5%  wkPos  40%
+  equal-weight all 30        CAGR   15.6%  Sharpe 0.89  maxDD  -29.6%  wkPos  56%
+  SPY buy & hold             CAGR   11.3%  Sharpe 0.71  maxDD  -25.4%  wkPos  55%

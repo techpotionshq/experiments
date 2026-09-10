@@ -8,3 +8,5 @@ __pycache__/
 k1h/
 kmeme/
 kdaily/
+stocks/
+*.json
