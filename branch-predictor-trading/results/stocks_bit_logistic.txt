@@ -1,0 +1,13 @@
+US stocks daily, 2021-09-10 to 2026-09-10, 30 names, 2bps
+
+=== 1-BIT predictor (go the way the last day went), equal-weight basket ===
+  1-bit MOMENTUM long/flat           CAGR    6.3%  Sharpe  0.41
+  1-bit MOMENTUM long/short          CAGR   -1.5%  Sharpe -0.06
+  1-bit REVERSAL long/flat (buy yesterday's losers) CAGR    0.9%  Sharpe  0.15
+
+  yesterday's direction predicts today: 50.9% (50% = coin flip)
+
+=== LOGISTIC REGRESSION (5 lagged daily returns -> next-day up), pooled across stocks ===
+  overall next-day accuracy: 51.7%
+  on the 20% most confident: 53.1%
+  base rate (share up days) : 51.6%
