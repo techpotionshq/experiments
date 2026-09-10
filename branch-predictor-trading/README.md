@@ -312,6 +312,22 @@ signal (no look-ahead), and long-only levels on still-listed universes are
 survivorship-influenced, so treat the ranking of families as the robust result
 and the exact levels as optimistic. See `FINDINGS.md` for the full method notes.*
 
+## Related studies: range breakout and short straddle
+
+Two strategies carried over from other markets and tested on crypto and stocks
+with real data are written up in **`RANGE_AND_STRADDLE.md`**:
+
+- **Range breakout** (a forex strategy) on the crypto basket and US stocks: on
+  crypto it matches buy-and-hold's return at a much higher Sharpe (1.60 vs 1.15)
+  and two-thirds the drawdown; on stocks it is a drawdown-reducer that gives up
+  return in the bull. The forex "squeeze" filter does not transfer, and long/short
+  loses, both consistent with the findings above.
+- **Short ATM straddle** on BTC/ETH, priced off Deribit's real DVOL implied-vol
+  index: the crypto vol risk premium is real (implied vol runs ~7-11 points above
+  realized) and wins 62-65% of months, but the Sharpe is only 0.11-0.34 with
+  -65% to -92% drawdowns, the classic short-vol tail. Real but not worth
+  harvesting naked.
+
 ## Reproduce
 
 ```

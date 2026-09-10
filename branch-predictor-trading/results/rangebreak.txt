@@ -1,0 +1,46 @@
+RANGE BREAKOUT ported from forex to crypto and stocks (real OHLC, net of fees).
+scripts/bt_rangebreak.py . Donchian range breakout, ATR stop, trailing-channel exit.
+Default is the PLAIN breakout (no squeeze filter); see the squeeze comparison below.
+
+########## headline: plain breakout, long only ##########
+
+=== CRYPTO basket | range breakout (long only) | 6 names | 2021-01-01..2026-08-31 | fee 10 bps/side ===
+  params: lookback 20  exit 10  ATR 14x2.0  squeeze q1.0 (off)  maxhold 60
+  range breakout   CAGR    82.6%  Sharpe  1.60  maxDD   -47.4%
+  buy & hold       CAGR    82.7%  Sharpe  1.15  maxDD   -77.8%
+  trades 213  win 39%  avg/trade +14.64%  time in market 41%  weekly+ 37%
+  per-year net (breakout / hold): 2021: +827%/+2054%  2022: -25%/-68%  2023: +87%/+153%  2024: +90%/+160%  2025: +12%/-17%  2026: +10%/-19%
+
+=== US STOCKS basket | range breakout (long only) | 29 names | 2020-09-11..2026-09-10 | fee 2 bps/side ===
+  params: lookback 20  exit 10  ATR 14x2.0  squeeze q1.0 (off)  maxhold 60
+  range breakout   CAGR     6.9%  Sharpe  0.89  maxDD    -8.9%
+  buy & hold       CAGR    19.4%  Sharpe  1.09  maxDD   -29.2%
+  trades 959  win 37%  avg/trade +1.33%  time in market 47%  weekly+ 52%
+  per-year net (breakout / hold): 2020: +0%/+14%  2021: +13%/+31%  2022: -5%/-22%  2023: +17%/+45%  2024: +9%/+27%  2025: +4%/+18%  2026: +5%/+15%
+
+########## squeeze filter on vs off (does the forex 'coil' filter transfer?) ##########
+  market              squeeze    CAGR  Sharpe   maxDD  trades
+  CRYPTO basket          q0.3     50%    1.35    -42%     189
+  CRYPTO basket          q0.5     46%    1.27    -46%     203
+  CRYPTO basket      q1.0 off     83%    1.60    -47%     213
+  US STOCKS basket       q0.3      6%    0.92     -7%     700
+  US STOCKS basket       q0.5      7%    0.99     -9%     833
+  US STOCKS basket   q1.0 off      7%    0.89     -9%     959
+
+########## long only vs long/short ##########
+  market                   side    CAGR  Sharpe   maxDD
+  CRYPTO basket       long only     83%    1.60    -47%
+  CRYPTO basket      long/short     48%    0.97    -50%
+  US STOCKS basket    long only      7%    0.89     -9%
+  US STOCKS basket   long/short     -1%   -0.04    -14%
+
+########## lookback robustness (plain, long only) ##########
+  market              lookback    CAGR  Sharpe   maxDD
+  CRYPTO basket             10     61%    1.24    -56%
+  CRYPTO basket             20     83%    1.60    -47%
+  CRYPTO basket             35     50%    1.27    -43%
+  CRYPTO basket             55     32%    1.02    -45%
+  US STOCKS basket          10      8%    0.95    -13%
+  US STOCKS basket          20      7%    0.89     -9%
+  US STOCKS basket          35      6%    0.89     -9%
+  US STOCKS basket          55      6%    0.92     -7%
