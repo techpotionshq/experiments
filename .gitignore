@@ -1,0 +1,6 @@
+*.csv
+*.zip
+*.data
+*.npz
+/kalt/
+__pycache__/
