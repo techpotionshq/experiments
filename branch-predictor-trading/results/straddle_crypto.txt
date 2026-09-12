@@ -1,0 +1,17 @@
+SHORT ATM STRADDLE on BTC and ETH, premium priced off real Deribit DVOL.
+scripts/bt_straddle_crypto.py . Sell call+put ATM, collect premium, settle vs the
+real move. 30-day cycles, held to expiry; a stop-managed variant closes if the
+loss exceeds 2x the premium. P&L is in units of underlying notional.
+
+          cyc  meanIV  meanRV  IV-RV  | variant        ann%  Sharpe  win%   avg%  worst%  maxDD%  total%
+  BTC      66   62.3%   51.0% +11.3  | held-to-exp   12.9%    0.28   62% +1.06%  -43.7%  -65.1%    +70%
+                                     | stop 2x       14.9%    0.34   62% +1.23%  -32.6%  -55.4%    +81%
+  ETH      66   76.1%   69.1%  +7.0  | held-to-exp    6.3%    0.11   65% +0.52%  -49.7%  -91.9%    +34%
+                                     | stop 2x       -0.1%   -0.00   64% -0.01%  -44.1%  -78.2%     -1%
+
+  per-year P&L (units of notional), held-to-expiry:
+    BTC:  2021: +24%  2022: +72%  2023: -27%  2024: -15%  2025: +41%  2026: -26%
+    ETH:  2021: +46%  2022: +45%  2023: +24%  2024: -29%  2025: -13%  2026: -38%
+
+  Read: mean IV above mean RV is the vol risk premium the short straddle harvests;
+  a negative worst-cycle shows the fat left tail (a big move overwhelms the premium).
