@@ -1,0 +1,14 @@
+Slow-bar long-only static strategies. Binance 1h klines 2021-2025 resampled, 7.5 bps/side.
+Out-of-sample = second half (coeffs fit on first half, frozen). $100 start.
+confirm3 = long after 3 up bars, flat after 3 down bars (no fitted parameters).
+logit    = static logistic on [r1,r2,r3,mom6,vol6] -> P(next bar up), long if >0.5 (standardized).
+
+pair      intvl |     hold $ confirm3 $    logit $
+BTCUSDT   8h    | 290(DD-33/Sh1.17) 260(DD-36/Sh1.30) 110(DD-25/Sh0.28)
+BTCUSDT   12h   | 296(DD-33/Sh1.18) 178(DD-30/Sh0.86) 124(DD-18/Sh0.50)
+ETHUSDT   8h    | 160(DD-64/Sh0.61) 155(DD-43/Sh0.61) 58(DD-76/Sh-0.17)
+ETHUSDT   12h   | 162(DD-65/Sh0.63) 230(DD-46/Sh0.97) 87(DD-60/Sh0.10)
+SOLUSDT   8h    | 583(DD-64/Sh1.25) 843(DD-44/Sh1.73) 73(DD-70/Sh-0.04)
+SOLUSDT   12h   | 604(DD-63/Sh1.26) 304(DD-53/Sh1.06) 285(DD-38/Sh1.24)
+DOGEUSDT  8h    | 180(DD-75/Sh0.72) 295(DD-65/Sh0.99) 51(DD-66/Sh-0.30)
+DOGEUSDT  12h   | 191(DD-74/Sh0.74) 285(DD-71/Sh0.96) 114(DD-61/Sh0.37)
